@@ -1,19 +1,19 @@
 const sqlite3 = require('sqlite3').verbose()
+const QUERIES = require('./queries')
 
 const DATABASE = 'db.sqlite'
 
-const db = new sqlite3.Database(DATABASE, (err) => {
+const db = new sqlite3.Database(DATABASE, err => {
     if (err) {
-        console.error('Cannot open database')
-        console.error(err.message)
-        throw err
-    }else{
-        console.log('Connected to database.')
-        db.run(`PRAGMA foreign_keys = ON`);
-        db.run(`CREATE TABLE Users (
-            UserId INTEGER PRIMARY KEY AUTOINCREMENT,
-            UserName TEXT UNIQUE NOT NULL
-            )`,
+        return console.error(err.message)
+    }
+    console.log('Successful connection to the database')
+});
+
+(async () => {
+    try {
+        await db.run(`PRAGMA foreign_keys = ON`)
+        await db.run(QUERIES.SQL_USERS,
             (err) => {
                 if (err) {
                     console.error(err.message)
@@ -23,15 +23,8 @@ const db = new sqlite3.Database(DATABASE, (err) => {
                     db.run(insertUser, ['user123456'])
                     console.error('Table users just created')
                 }
-            });
-        db.run(`CREATE TABLE Exercises (
-            ExerciseId INTEGER PRIMARY KEY AUTOINCREMENT,
-            UserId INTEGER NOT NULL,
-            Description TEXT NOT NULL,
-            Duration TEXT NOT NULL,
-            Date INTEGER,
-            FOREIGN KEY(UserId) REFERENCES Users(UserId)
-            )`,
+            })
+        await db.run(QUERIES.SQL_EXERCISES,
             (err) => {
                 if (err) {
                     console.error(err.message)
@@ -41,8 +34,8 @@ const db = new sqlite3.Database(DATABASE, (err) => {
                     db.run(insertExercises, ['2','test desc 2','test duration 2',982374986922])
                     console.error('Table exercises just created')
                 }
-            });
-    }
-});
+            })
+    } catch (e) { return console.error(e.message) }
+})();
 
 module.exports = db

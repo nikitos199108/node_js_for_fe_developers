@@ -1,0 +1,15 @@
+const SQL_USERS = `CREATE TABLE Users (
+    UserId INTEGER PRIMARY KEY AUTOINCREMENT,
+    UserName TEXT UNIQUE NOT NULL)`;
+const SQL_EXERCISES = `CREATE TABLE Exercises (
+    ExerciseId INTEGER PRIMARY KEY AUTOINCREMENT,
+    UserId INTEGER NOT NULL,
+    Description TEXT NOT NULL,
+    Duration INTEGER NOT NULL,
+    Date INTEGER,
+    FOREIGN KEY(UserId) REFERENCES Users(UserId))`;
+
+module.exports = {
+    SQL_USERS,
+    SQL_EXERCISES
+}
