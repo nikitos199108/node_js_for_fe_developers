@@ -3,9 +3,9 @@ const dateValidation = (date) => {
 
     if(!date.match(regEx)) return false
 
-    const seconds = new Date(date).getTime();
+    const seconds = new Date(date).getTime()
 
-    return !(!seconds && seconds !== 0);
+    return !(!seconds && seconds !== 0)
 }
 
 module.exports = {

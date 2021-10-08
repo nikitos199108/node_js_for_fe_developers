@@ -43,15 +43,11 @@ const addExercise = (req, res) => {
         res.status(400).json({'error': 'Enter exercise duration please!'})
         return;
     }
-    if (!date){
-        date = new Date()
-    }
-
-    const isDateValid = helpers.dateValidation(date)
-
-    if (!isDateValid) {
+    if (date && !helpers.dateValidation(date.toString())){
         res.status(400).json({'error': 'Enter correct date please!'})
         return;
+    } else {
+        date = new Date()
     }
 
     const userId = req.params.id
